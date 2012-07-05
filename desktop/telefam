@@ -1,0 +1,22 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+# telefam
+# Super Simple Desktop for computer iliterated people in your family
+# Author: Alfonso E.M. <alfonso@el-magnifico.org>
+# License: Free (GPL3) 
+# Version: 1.0 - 23/Jun/2012
+
+from configobj import ConfigObj
+import Gui
+
+# Main
+def main():
+  CONF = ConfigObj("telefam.conf")
+     
+  gui = Gui.Interface(CONF["INTERFACE"])
+
+
+
+if __name__ == '__main__':
+  main()
