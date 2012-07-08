@@ -9,15 +9,21 @@
 
 from configobj import ConfigObj
 import Gui
+import Controls
 
 # Main
 def main():
     CONF = ConfigObj("telefam.conf")
+
+    for module in CONF["MODULES"]["active"]:
+        CONF["MODULES"][module]=ConfigObj(module+".conf")
      
     interface = Gui.Interface(CONF["INTERFACE"])
+    controller= Controls.Control(CONF["CONTROL"])
+    
     interface.clean()
-    interface.show_main_menu()
-    option=interface.wait_for_user()
+    interface.show_main_menu(CONF["MODULES"])
+    option=controller.wait_for_user()
     print option
 
 if __name__ == '__main__':
