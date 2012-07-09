@@ -13,18 +13,31 @@ import Controls
 
 # Main
 def main():
+# Load main config file
     CONF = ConfigObj("telefam.conf")
 
+# Load module specific config files
     for module in CONF["MODULES"]["active"]:
         CONF["MODULES"][module]=ConfigObj(module+".conf")
      
+# Create a Graphic User Interface
     interface = Gui.Interface(CONF["INTERFACE"])
+
+# Create a Controller (keyboard, joystick..)
     controller= Controls.Control(CONF["CONTROL"])
-    
-    interface.clean()
-    interface.show_main_menu(CONF["MODULES"])
-    option=controller.wait_for_user()
-    print option
+
+# Main loop
+    option=0
+    while True:
+      interface.clean()
+      interface.show_main_menu(CONF["MODULES"],option)
+      key=controller.wait_for_user()
+      if key == "LEFT" and option > 0: 
+        option -=1
+      if key == "RIGHT" and option < len(CONF["MODULES"]["active"]) - 1: 
+        option +=1
+
 
 if __name__ == '__main__':
   main()
+  

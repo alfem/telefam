@@ -20,7 +20,9 @@ class Interface:
     def __init__(self,CONF):
         self.width=int(CONF["width"])
         self.height=int(CONF["height"])
-       
+        self.centerx=self.width/2
+        self.centery=self.height/2
+        
 # Pygame modules initialization. Avoid general initialization because in some hardware you have no sound'
         pygame.font.init()
         pygame.display.init()
@@ -63,15 +65,28 @@ class Interface:
             icons[module]=pygame.image.load("icons/"+modules[module]["icon"])
         return icons
         
-    def show_main_menu(self,modules):
+    def show_main_menu(self,modules,option):
         icons=self.load_menu_icons(modules)
-        text = self.font_big.render("TeleFam", 1, self.font_color)
+
+        text = self.font_small.render("TeleFam", 1, self.font_color)
+        self.screen.blit(text, (1,1))
+
+        module=modules['active'][option]
+        title=modules[module]["title"]
+        icon=icons[module]
+        description=modules[module]["description"]
+
+        self.draw_box((self.centerx-250,self.centery-250,500,500),True)
+        self.screen.blit(icon, (self.centerx-250,self.centery-250))
+        text = self.font_big.render(title, 1, self.font_color)
         width,height=text.get_size()
-        x=self.width/2-width/2
-        self.draw_box((x,10,width,height),False)
-#        self.draw_box((x,100,width,height),True)
-        self.screen.blit(text, (x,10))
-        self.screen.blit(icons["messages"], (x,10))
+        x=self.centerx-width/2
+        self.screen.blit(text, (x, self.centery-300))
+        text = self.font.render(description, 1, self.font_color)
+        width,height=text.get_size()
+        x=self.centerx-width/2
+        self.screen.blit(text, (x, self.centery+300))
+
         pygame.display.flip()
 
 
