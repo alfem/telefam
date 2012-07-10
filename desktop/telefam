@@ -8,8 +8,20 @@
 # Version: 1.0 - 23/Jun/2012
 
 from configobj import ConfigObj
+import imp
 import Gui
 import Controls
+
+# Load a module or plugin dinamically
+def load_module(module_name):
+        fp, pathname, description = imp.find_module(module_name)
+        try:
+          module=imp.load_module(module_name, fp, pathname, description)
+          module.main()
+        finally:
+          if fp:
+            fp.close()
+
 
 # Main
 def main():
@@ -36,7 +48,8 @@ def main():
         option -=1
       if key == "RIGHT" and option < len(CONF["MODULES"]["active"]) - 1: 
         option +=1
-
+      if key == "OK": 
+        load_module(CONF["MODULES"]["active"][option])
 
 if __name__ == '__main__':
   main()
