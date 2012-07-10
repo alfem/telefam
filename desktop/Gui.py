@@ -18,6 +18,8 @@ class Interface:
     Screen graphics and other media are embedded in this class
     '''
     def __init__(self,CONF):
+
+        self.CONF=CONF
         self.width=int(CONF["width"])
         self.height=int(CONF["height"])
         self.centerx=self.width/2
@@ -62,7 +64,7 @@ class Interface:
     def load_menu_icons(self,modules):
         icons={}
         for module in modules["active"]:
-            icons[module]=pygame.image.load("icons/"+modules[module]["icon"])
+            icons[module]=pygame.image.load(self.CONF["icons_path"]+modules[module]["icon"])
         return icons
         
     def show_main_menu(self,modules,option):
@@ -76,17 +78,20 @@ class Interface:
         icon=icons[module]
         description=modules[module]["description"]
 
+# Draw a box
         self.draw_box((self.centerx-250,self.centery-250,500,500),True)
-        self.screen.blit(icon, (self.centerx-250,self.centery-250))
+# Paint module icon
+        self.screen.blit(icon, (self.centerx-200,self.centery-200))
+# Write module title
         text = self.font_big.render(title, 1, self.font_color)
         width,height=text.get_size()
         x=self.centerx-width/2
-        self.screen.blit(text, (x, self.centery-300))
+        self.screen.blit(text, (x, self.centery-250))
+# Write module description
         text = self.font.render(description, 1, self.font_color)
         width,height=text.get_size()
         x=self.centerx-width/2
-        self.screen.blit(text, (x, self.centery+300))
-
+        self.screen.blit(text, (x, self.centery+190))
         pygame.display.flip()
 
 
