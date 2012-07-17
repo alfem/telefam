@@ -13,23 +13,20 @@ import sys
 
 class Control:
     '''
-    Screen graphics and other media are embedded in this class
+    User interaction class. Simple actions for up, down, left, right and ok can be activated with joystick, keyboard or any other device.
     '''
     def __init__(self,CONF):
       return
       
-    def wait_for_user(self):
+    def wait_for_user_action(self):
       while True:
         for event in pygame.event.get() :
+# KEYBOARD
           if event.type == pygame.KEYDOWN :
             if event.key == pygame.K_ESCAPE:
               sys.exit(0)
             if event.key == pygame.K_SPACE :
               return "OK"
-            if event.key == pygame.K_UP :
-              return "UP"
-            if event.key == pygame.K_DOWN :
-              return "DOWN"
             if event.key == pygame.K_UP :
               return "UP"
             if event.key == pygame.K_DOWN :

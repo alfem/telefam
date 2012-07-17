@@ -1,0 +1,5 @@
+new: Messages created by the Telefam Desktop user (NOT IMPLEMENTED)
+sent: New messages already sent (NOT IMPLEMENTED)
+received: Remote messages created by web users and downloaded to Telefam Desktop Box
+read: Received messages already read by user
+deleted: Messages deleted by user
