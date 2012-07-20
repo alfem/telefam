@@ -7,23 +7,29 @@
 # License: Free (GPL3) 
 # Version: 1.0 - 10/Jul/2012
 
-import message_base
+import Message_Storage
+import User_Storage
 
 # Main
 def main(CONF, INTERFACE, CONTROLLER):
     module_name=__name__
-    print "Module " + module_name
 
-    messages=message_base.message(CONF["MODULES"][module_name]["data_path"])
-    new_messages=messages.list("received")
+    user_storage=User_Storage.storage(CONF["USERS"]["data_path"])
+    message_storage=Message_Storage.storage(CONF["MODULES"]["messages"]["data_path"], user_storage)
+    new_messages=message_storage.list("received")
 
 # Main loop
     index=0
+
     while True:
       INTERFACE.clean()
-      INTERFACE.messages.show_list(new_messages)
+      
+      m=new_messages[index]
+      
+      INTERFACE.show_messages(message_storage.get("received",m))
+      
       action=CONTROLLER.wait_for_user_action()
-      if action == "UP" and option > 0: 
+      if action == "UP" and index > 0: 
         index -=1
       if action == "DOWN": 
         index +=1

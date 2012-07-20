@@ -9,6 +9,7 @@
 
 import pygame
 from pygame.locals import *
+import time
 import Voice
 import Sound
 
@@ -95,4 +96,67 @@ class Interface:
         pygame.display.flip()
 
 
+# Draw a box with text wrapped
+    def draw_textbox(self, surf, rect, font, color, text, maxlines=None):
+
+      r,c,txt = rect,color,text
+      tmp = font.render(" ", 1, c)
+      sw,sh = tmp.get_size()
+      y = r.top
+      row = 1
+      done = False
+      for sentence in txt.split("\n"):
+        x = r.left
+        words = sentence.split(" ")
+            
+        for word in words:
+            word += " "
+            tmp = font.render(word, 1, c)
+            (iw, ih) = tmp.get_size()
+            if (x+iw > r.right):
+                x = r.left
+                y += sh
+                row += 1
+                if (maxlines != None and row > maxlines):
+                    done = True
+                    break
+            surf.blit(tmp, (x, y))
+            #x += iw+sw
+            x += iw
+        if done:
+            break
+        y += sh
+        row += 1
+        if (maxlines != None and row > maxlines):
+            break
+
+
+
+# MESSAGES (FIX)
+# Show messages page
+    def show_messages(self,message):
+        left_margin=self.centerx-400
+        y=50
+
+        self.draw_box((left_margin,y,800,200),True)
+
+        y=y+10
+        text=self.font.render(time.strftime("%d/%m/%Y %H:%M", message.timestamp),1,self.font_color)
+        self.screen.blit(text, (left_margin+5, y))
+
+        self.screen.blit(message.user.photo, (left_margin+500, y))
+
+        w,h=text.get_size()
+        y=y+h
+        text = self.font.render(message.user.name+":", 1, self.font_color)
+        self.screen.blit(text, (left_margin+5, y))
+
+        text="\n".join(message.text)
+        y=y+300
+        self.draw_textbox(self.screen,pygame.Rect(left_margin+5,y ,750,150),self.font,self.font_color, text, 6) 
+        
+        y=y+300
+
+        pygame.display.flip()    
+        return
 
