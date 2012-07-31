@@ -44,13 +44,16 @@ class Interface:
         self.decoration_color=pygame.color.Color(CONF["decoration_color"])
         self.decoration_color_active=pygame.color.Color(CONF["decoration_color_active"])
         self.font_color=pygame.color.Color(CONF["font_color"])
+        self.font_color_active=pygame.color.Color(CONF["font_color_active"])
 
         pygame.mouse.set_visible(0)
 
+# Clear the screen
     def clean(self):
         self.screen.fill(self.back_color)
         pygame.display.flip()
 
+# Draw a box with a frame
     def draw_box(self,coords,active):
         rectangle=pygame.Rect(coords)
         if active:
@@ -68,6 +71,8 @@ class Interface:
             icons[module]=pygame.image.load(self.CONF["icons_path"]+modules[module]["icon"])
         return icons
         
+        
+# Show a big icons main menu
     def show_main_menu(self,modules,option):
         icons=self.load_menu_icons(modules)
 
@@ -80,7 +85,7 @@ class Interface:
         description=modules[module]["description"]
 
 # Draw a box
-        self.draw_box((self.centerx-250,self.centery-250,500,500),True)
+        self.draw_box((self.centerx-250,self.centery-250,500,500), True)
 # Paint module icon
         self.screen.blit(icon, (self.centerx-200,self.centery-200))
 # Write module title
@@ -106,8 +111,9 @@ class Interface:
       row = 1
       done = False
       for sentence in txt.split("\n"):
+        usentence=sentence.decode("utf-8")
         x = r.left
-        words = sentence.split(" ")
+        words = usentence.split(" ")
             
         for word in words:
             word += " "
@@ -130,32 +136,76 @@ class Interface:
         if (maxlines != None and row > maxlines):
             break
 
+# Show a text menu in a box
+    def show_actions_menu(self, CONTROLLER, actions, active):
+        margin=20
+        maxwidth=0
+        menu=pygame.Surface((800,600))
+        menu.fill((255,0,255))
+        menu.set_colorkey((255,0,255))
 
+        while True:
+            maxheight=0
+            option=0
+            for action in actions:
+                if option == active:
+                  text=self.font.render(action,1,self.font_color_active)
+                else:
+                  text=self.font.render(action,1,self.font_color)
+                menu.blit(text, (0, maxheight))
+                w,h=text.get_size()
+                if w> maxwidth:
+                    maxwidth=w
+                maxheight += h
+                option += 1
+                
+            self.draw_box((self.centerx- maxwidth/2 -margin, self.centery - maxheight/2 -margin, maxwidth+2*margin,maxheight+2*margin),True)
+            self.screen.blit(menu, (self.centerx - maxwidth/2 , self.centery - maxheight/2), (0 ,0 ,maxwidth,maxheight))
+            pygame.display.flip()    
+
+            action=CONTROLLER.wait_for_user_action()
+            if action == "UP" and active > 0: 
+              active -=1
+            if action == "DOWN" and active < len(actions) - 1: 
+              active +=1
+            if action == "OK": 
+              return active
 
 # MESSAGES (FIX)
-# Show messages page
-    def show_messages(self,message):
+# Show message page
+    def show_message(self,message):
+
         left_margin=self.centerx-400
         y=50
 
-        self.draw_box((left_margin,y,800,200),True)
+        self.draw_box((left_margin,y,800,200), False)
 
         y=y+10
         text=self.font.render(time.strftime("%d/%m/%Y %H:%M", message.timestamp),1,self.font_color)
-        self.screen.blit(text, (left_margin+5, y))
+        self.screen.blit(text, (left_margin+10, y))
 
-        self.screen.blit(message.user.photo, (left_margin+500, y))
+        self.screen.blit(message.user.photo, (left_margin+480, y))
 
         w,h=text.get_size()
         y=y+h
         text = self.font.render(message.user.name+":", 1, self.font_color)
-        self.screen.blit(text, (left_margin+5, y))
+        self.screen.blit(text, (left_margin+10, y))
 
         text="\n".join(message.text)
         y=y+300
-        self.draw_textbox(self.screen,pygame.Rect(left_margin+5,y ,750,150),self.font,self.font_color, text, 6) 
+        self.draw_textbox(self.screen,pygame.Rect(left_margin+10,y ,780,150),self.font,self.font_color, text, 6) 
         
-        y=y+300
+        pygame.display.flip()    
+        return
+
+
+    def show_warning(self,warning):
+        left_margin=self.centerx-400
+        y=50
+        self.draw_box((left_margin,y,800,200), False)
+
+        y=y+10
+        self.draw_textbox(self.screen,pygame.Rect(left_margin+10,y ,780,150),self.font,self.font_color, warning, 6) 
 
         pygame.display.flip()    
         return

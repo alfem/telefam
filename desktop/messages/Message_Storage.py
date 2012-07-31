@@ -11,13 +11,12 @@ class storage:
         self.data_path=data_path
         self.user_storage=user_storage
 
-    def list(self, queue):
-        dir_list=os.listdir(os.path.join(self.data_path,queue))
+    def list(self, folder):
+        dir_list=os.listdir(os.path.join(self.data_path,folder))
         return dir_list
 
-    def get(self,queue, index):
-        filename=os.path.join(self.data_path, queue,index)
-        print "Message:", filename
+    def get(self,folder, index):
+        filename=os.path.join(self.data_path , folder ,index)
         f = open(filename, 'r')
         content=f.readlines()
         f.close()
@@ -27,6 +26,12 @@ class storage:
         user=self.user_storage.get(username)
         
         return message(timestamp, user, content)
+
+    def delete(self,folder, index):
+        filename=os.path.join(self.data_path , folder ,index)
+        if os.path.exists(filename):
+             os.remove(filename)
+        return 
 
 class message:
     '''
