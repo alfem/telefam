@@ -171,6 +171,17 @@ class Interface:
             if action == "OK": 
               return active
 
+    def show_warning(self,warning):
+        left_margin=self.centerx-400
+        y=50
+        self.draw_box((left_margin,y,800,200), False)
+
+        y=y+10
+        self.draw_textbox(self.screen,pygame.Rect(left_margin+10,y ,780,150),self.font,self.font_color, warning, 6) 
+
+        pygame.display.flip()    
+        return
+
 # MESSAGES (FIX)
 # Show message page
     def show_message(self,message):
@@ -198,15 +209,61 @@ class Interface:
         pygame.display.flip()    
         return
 
+# PHOTOS (FIX)
+# Show galleries page
+    def show_galleries(self,page):
 
-    def show_warning(self,warning):
-        left_margin=self.centerx-400
+        left_margin=self.centerx-250
         y=50
-        self.draw_box((left_margin,y,800,200), False)
+        n=0
 
-        y=y+10
-        self.draw_textbox(self.screen,pygame.Rect(left_margin+10,y ,780,150),self.font,self.font_color, warning, 6) 
+        for gallery in page:
+            n+=1
+            if gallery:
+                self.screen.blit(gallery.thumbnail, (left_margin-gallery.thumbnail.get_width()-10, y))
 
+                state=False
+                color=self.font_color
+                if n == 2:
+                    state=True
+                    color=self.font_color_active
+
+                self.draw_box((left_margin,y,700,200), state)
+
+                y=y+10
+                text=self.font_small.render(time.strftime("%d/%m/%Y %H:%M", gallery.timestamp),1, color)
+                self.screen.blit(text, (left_margin+10, y))
+                w,h=text.get_size()
+                y=y+h
+                text = self.font.render(gallery.user.name+":", 1, color)
+                self.screen.blit(text, (left_margin+10, y))
+                w,h=text.get_size()
+                y=y+h
+                self.draw_textbox(self.screen,pygame.Rect(left_margin+10,y ,700,150),self.font, color, gallery.description, 3) 
+                y=y+150
+            else:
+                y=y+200
+              
         pygame.display.flip()    
+        return
+
+# Calculate scale factor to resize photos
+    def fit(self,w,h,dw,dh):
+        sw=float(w)/float(dw)
+        sh=float(h)/float(dh)
+        if sw > sh:
+           scale=sw
+        else:
+           scale=sh
+        return int(w/scale),int(h/scale)
+
+# Show photo in a gallery
+    def show_photo(self, photo):
+        photo_w,photo_h=photo.get_size()
+        scaled_w,scaled_h=self.fit(photo_w,photo_h,800,600)  
+        scaled_photo=pygame.transform.scale(photo,(scaled_w,scaled_h))
+        self.screen.blit(scaled_photo, (self.centerx-scaled_w/2, self.centery-scaled_h/2))
+        pygame.display.flip()    
+
         return
 

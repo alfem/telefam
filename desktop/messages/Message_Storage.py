@@ -25,7 +25,7 @@ class storage:
         username=content.pop(0).rstrip()
         user=self.user_storage.get(username)
         
-        return message(timestamp, user, content)
+        return Message(timestamp, user, content)
 
     def delete(self,folder, index):
         filename=os.path.join(self.data_path , folder ,index)
@@ -33,7 +33,7 @@ class storage:
              os.remove(filename)
         return 
 
-class message:
+class Message:
     '''
     A simple short message
     '''
