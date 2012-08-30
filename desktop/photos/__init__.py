@@ -42,9 +42,10 @@ def main(CONF, INTERFACE, CONTROLLER):
             else:
                 page.append(False)
 
+# Show a list of galleries and select one
         INTERFACE.show_galleries(page)
-
         action=CONTROLLER.wait_for_user_action()
+        print action
         if (action == "UP") and indexg > 0: 
             indexg -=1
         if (action == "DOWN") and indexg < len(galleries) - 1: 
@@ -56,6 +57,7 @@ def main(CONF, INTERFACE, CONTROLLER):
             photos=photo_storage.list_photos(galleries[indexg])
             while True:
                 INTERFACE.clean()
+# Show every photo in the selected gallery
                 INTERFACE.show_photo(photo_storage.get_photo(galleries[indexg],photos[indexp]))
                 action=CONTROLLER.wait_for_user_action()
                 if (action == "LEFT") and indexp > 0: 
@@ -66,7 +68,7 @@ def main(CONF, INTERFACE, CONTROLLER):
                     break
                 if action == "OK": 
                     break
-        return
+    return
   
 if __name__ == '__main__':
   main()
