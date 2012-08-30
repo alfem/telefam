@@ -10,6 +10,24 @@
 import Message_Storage
 import User_Storage
 
+
+# Function called by telefam-daemon in order to trigger automatic download of new items
+def daemon(CONF, CONNECTION):
+    user_storage=User_Storage.storage(CONF["USERS"]["data_path"])
+    message_storage=Message_Storage.storage(CONF["MODULES"]["messages"]["data_path"], user_storage)
+    folder="received"
+
+    items=CONNECTION.call("get_message_list")
+    
+    for item in items:
+        message_data=CONNECTION.call("get_message",item)
+        print message_data["text"]
+        m=Message_Storage.Message(str(message_data["id"]), message_data["created_on"],str(message_data["user_id"]),message_data["text"])
+        result=message_storage.create("received",m)
+        print result
+    return "OK"
+
+
 # Main
 def main(CONF, INTERFACE, CONTROLLER):
     module_name=__name__
