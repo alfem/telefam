@@ -25,7 +25,7 @@ class Control:
           if event.type == pygame.KEYDOWN :
             if event.key == pygame.K_ESCAPE:
               sys.exit(0)
-            if event.key == pygame.K_SPACE :
+            if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN :
               return "OK"
             if event.key == pygame.K_UP :
               return "UP"
