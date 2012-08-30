@@ -1,0 +1,15 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,False}}
+{{extend 'layout.html'}}
+
+{{if 'message' in globals():}}
+<h3>{{=message}}</h3>
+{{pass}}
+
+<h4>Messages</h4>
+{{for item in items:}}
+<li/>{{=A(item.created_on,_href=URL('telefam','messages','view',args=[item.id]))}} {{=item.text}}</li>
+{{pass}}
+
+{{=form}}
+
+

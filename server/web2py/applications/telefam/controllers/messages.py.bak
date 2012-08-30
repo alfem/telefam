@@ -1,0 +1,8 @@
+# coding: utf8
+
+@auth.requires_login()
+def index(): 
+    "lists all messages"
+    form = crud.create(db.messages)
+    items = db(db.messages.page_id==this_page.id).select()
+    return dict(items=items, form=form)

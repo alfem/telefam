@@ -1,0 +1,21 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,False}}
+{{extend 'layout.html'}}
+
+{{if 'message' in globals():}}
+<h3>{{=message}}</h3>
+{{pass}}
+
+<h4>Photo galleries for {{=session.telefam_description}}:</h4>
+
+<h5>New</h5>
+To add a new photo gallery, just write down a link to any {{=A("http://www.flickr.com","Flickr")}}Flickr gallery. Telefam will download the photos automatically
+{{=A('Send a new gallery',_href=URL('telefam','galleries','new'), _class='button')}}</li>
+
+<h5>Old galleries</h5>
+<ul>
+{{for item in items:}}
+<li/>{{=A(item.created_on,_href=URL('telefam','galleries','edit',args=[item.id]))}} {{=item.description}}</li>
+</ul>
+{{pass}}
+
+

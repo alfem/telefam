@@ -1,0 +1,21 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,False}}
+{{extend 'layout.html'}}
+
+{{if 'message' in globals():}}
+<h3>{{=message}}</h3>
+{{pass}}
+
+<h4>Messages for {{session.telefam_description}}:</h4>
+
+<h5>New</h5>
+A Telefam message is a short text, with an optional photo or audio file attached. 
+{{=A('Send a new message',_href=URL('telefam','messages','new'), _class='button')}}</li>
+
+<h5>Old messages</h5>
+<ul>
+{{for item in items:}}
+<li/>{{=A(item.created_on,_href=URL('telefam','messages','edit',args=[item.id]))}} {{=item.text[0:120]}}</li>
+</ul>
+{{pass}}
+
+

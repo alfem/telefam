@@ -1,0 +1,10 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,False}}
+{{extend 'layout.html'}}
+
+
+
+<h3>Add a new Telefam</h3>
+
+{{=form}}
+
+{{pass}}
