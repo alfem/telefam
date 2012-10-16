@@ -1,6 +1,7 @@
 
 import pygame
 import os
+import urllib2
 
 class storage:
     '''
@@ -9,37 +10,41 @@ class storage:
     def __init__(self,data_path):
         self.data_path=data_path
 
-    def get(self, username):
-        filename=os.path.join(self.data_path, username+".jpg")
+    def get(self, user_id):
+        filename=os.path.join(self.data_path, user_id+".jpg")
         photo=pygame.image.load(filename)
 
-        filename=os.path.join(self.data_path, username+".txt")
+        filename=os.path.join(self.data_path, user_id+".txt")
         f = open(filename, 'r')
         content=f.readlines()
         f.close()
 
         name=content.pop(0).rstrip()
-        relation=content.pop(0).rstrip()
-        return User(photo, name, relation)
+        return User(user_id, name, photo)
 
-    def create(self, user):
-        filename=os.path.join(self.data_path, username+".txt")
+    def store(self, user):
+        filename=os.path.join(self.data_path, user.id+".txt")
         if os.path.exists(filename):
-            return "ERROR"
+            return False
         f = open(filename, 'w')
         f.write(user.name+"\n")
-        f.write(user.relation+"\n")
         f.close()
-        return
+        return True
+
+    def update_photo(self, userid, filename):
+        user_filename=os.path.join(self.data_path, userid+".jpg")
+        os.rename(filename, user_filename)
+
+        return True
         
 
 class User:
     '''
     An user with photo and properties (name)
     '''
-    def __init__(self, photo, name, relation):
-        self.photo=photo
+    def __init__(self, id, name, photo):
+        self.id=id
         self.name=name
-        self.relation=relation
+        self.photo=photo
         
 

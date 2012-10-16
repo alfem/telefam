@@ -30,19 +30,33 @@ class Connection:
       return
 
     def call(self, function, params={}):
-      url="%s%s?key=%s" % (self.base_url, function, self.key)
+      url="%sjson/%s?key=%s" % (self.base_url, function, self.key)
 
       for param, value in params.iteritems():
-        print param, value
         url+="&%s=%s" % (param, value)
 
-      print url
+      print "URL:",url
       remote_file_handler=urllib2.urlopen(url)
       remote_data=json.load(remote_file_handler)
       remote_file_handler.close()
 
       return remote_data
 
+
+    def get_file(self, function, params={}, local_filename="/tmp/telefam.tmp"):
+        url="%srun/%s?key=%s" % (self.base_url, function, self.key)
+
+        for param, value in params.iteritems():
+            url+="&%s=%s" % (param, value)
+
+        print "URL:",url
+        remote_file_handler=urllib2.urlopen(url)
+        local_file_handler = open(local_filename, "w")
+        local_file_handler.write(remote_file_handler.read() )
+        local_file_handler.close()
+        remote_file_handler.close()
+
+        return True
 
       
 

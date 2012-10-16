@@ -1,7 +1,7 @@
 
 import os
 import time
-import User_Storage
+from users import *
 
 class storage:
     '''
