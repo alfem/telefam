@@ -8,10 +8,14 @@
 # Version: 1.0 - 1/Aug/2012
 
 import Photo_Storage
-import User_Storage
+from users import *
+
+# Function called by telefam-daemon in order to trigger automatic download of new items
+def daemon(CONF, CONNECTION, VOICE):
+    return "OK"
 
 # Main
-def main(CONF, INTERFACE, CONTROLLER):
+def main(CONF, INTERFACE, CONTROLLER ):
     module_name=__name__
 
     user_storage=User_Storage.storage(CONF["USERS"]["data_path"])

@@ -8,11 +8,11 @@
 # Version: 1.0 - 10/Jul/2012
 
 import Message_Storage
-import User_Storage
+from users import *
 
 
 # Function called by telefam-daemon in order to trigger automatic download of new items
-def daemon(CONF, CONNECTION):
+def daemon(CONF, CONNECTION, VOICE):
     user_storage=User_Storage.storage(CONF["USERS"]["data_path"])
     message_storage=Message_Storage.storage(CONF["MODULES"]["messages"]["data_path"], user_storage)
     folder="received"
@@ -25,6 +25,9 @@ def daemon(CONF, CONNECTION):
         m=Message_Storage.Message(str(message_data["id"]), message_data["created_on"],str(message_data["user_id"]),message_data["text"])
         result=message_storage.create("received",m)
         print result
+
+    VOICE.say("Tiene %i mensajes nuevos, por favor, conecte la tele para leerlos." % len(items))    
+
     return "OK"
 
 
