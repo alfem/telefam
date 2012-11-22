@@ -22,6 +22,7 @@ You can install it on a normal computer, but TeleFam has been designed for a TV 
 and cheap computers, the "Raspberry-Pi". Find more about this marvel in http://www.raspberrypi.org/ and try
 to sink your claws on one of them as soon as possible!
 
+Check some early screenshots here: https://github.com/alfem/telefam/tree/master/screenshots
 
 Ah! If you want to help, please contact me here:
 
